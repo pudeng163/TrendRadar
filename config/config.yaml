@@ -175,7 +175,7 @@ report:
 # 4.5 筛选策略
 # ===============================================================
 filter:
-  method: "keyword"                     # 筛选方式（二选一）
+  method: "ai"                     # 筛选方式（二选一）
                                        # keyword = 关键词匹配，不调用 AI，不消耗 token，但规则固定
                                        #           词组定义在 config/frequency_words.txt
                                        # ai = AI 智能分类，更灵活但每次运行消耗 token
@@ -266,7 +266,7 @@ notification:
   # 推送渠道配置
   channels:
     feishu:
-      webhook_url: ""                 # 飞书机器人 webhook URL
+      webhook_url: ""                 # 飞书机器人 webhook URL（已改为环境变量 FEISHU_WEBHOOK_URL 注入，不要明文写在配置里）
 
     dingtalk:
       webhook_url: ""                 # 钉钉机器人 webhook URL
@@ -363,11 +363,11 @@ ai:
   # 完整列表: https://docs.litellm.ai/docs/providers
   # 如果你对于看英文文档比较头疼，那么可以点击页面右下角的 【Ask AI】 ,用中文询问怎么配置
 
-  model: "deepseek/deepseek-v4-flash"
+  model: "openai/Qwen/Qwen3-8B"
 
-  api_key: ""                       # API Key（建议使用环境变量 AI_API_KEY）
-  
-  api_base: ""                      # 自定义 API 地址（可选，绝大多数情况留空即可）
+  api_key: ""                          # API Key（已改为环境变量 AI_API_KEY 注入，不要明文写在配置里）
+
+  api_base: "https://api.siliconflow.cn/v1"                      # 自定义 API 地址（可选，绝大多数情况留空即可）
                                     #
                                     # ❓ 什么时候需要填？
                                     #    当你使用的 AI 服务商不在上方支持列表中时。
@@ -393,7 +393,7 @@ ai:
   temperature: 1.0                  # 采样温度 (0.0-2.0)
                                     # 注意：部分模型(如 gpt-5)可能要求必须为 1.0，否则会报错
   
-  max_tokens: 5000                  # 最大生成 token 数
+  max_tokens: 10000                  # 最大生成 token 数
                                     # 注意：如果 API 不支持此参数(报 HTTP 400)，请设为 0 以禁用发送
   # 高级选项
   num_retries: 1                    # 失败重试次数
@@ -401,13 +401,12 @@ ai:
                                     # 示例: ["openai/gpt-4o-mini", "openai/deepseek-ai/DeepSeek-V3"]
 
   # 额外参数（一般无需修改，删掉 # 号即可启用）
-  # extra_params:
-  #   top_p: 1.0
-  #   presence_penalty: 0.0
-  #   stop: ["END"]
+  # 会原样透传给 LiteLLM，可用于补充请求参数或自定义请求头
+  # Qwen3 系列默认开启思考模式，长提示词分析会耗时过长导致超时，此处关闭
   extra_params:
     extra_body:
       enable_thinking: false
+
 
 # ===============================================================
 # 9. AI 分析功能（模型配置见上方 ai 段）
