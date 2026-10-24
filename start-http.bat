@@ -1,6 +1,9 @@
 @echo off
 chcp 65001 >nul
 
+REM 跳过 LiteLLM 启动时对 GitHub 的远程模型表拉取（国内网络会白等十几秒超时）
+set LITELLM_LOCAL_MODEL_COST_MAP=True
+
 echo ============================================================
 echo   TrendRadar MCP Server (HTTP 模式)
 echo ============================================================
