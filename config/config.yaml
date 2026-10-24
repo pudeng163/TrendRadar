@@ -405,7 +405,9 @@ ai:
   #   top_p: 1.0
   #   presence_penalty: 0.0
   #   stop: ["END"]
-
+  extra_params:
+    extra_body:
+      enable_thinking: false
 
 # ===============================================================
 # 9. AI 分析功能（模型配置见上方 ai 段）
